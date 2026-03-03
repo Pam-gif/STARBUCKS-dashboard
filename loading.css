@@ -1,0 +1,630 @@
+/* ═══════════════════════════════════════════════════════════
+   STARBUCKS ANALYTICS — LOADING SCREEN
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  --sb-green:        #00704A;
+  --sb-green-light:  #1E9E6E;
+  --sb-green-dark:   #1E3932;
+  --sb-green-deeper: #0d2b22;
+  --sb-green-glow:   rgba(0, 112, 74, .50);
+  --sb-gold:         #CBA258;
+  --bg:              #0a1210;
+  --text-primary:    #E8ECEF;
+  --text-secondary:  #8B9DAF;
+  --ease-out:        cubic-bezier(.22, 1, .36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+}
+
+/* ════════════════════════════════════════
+   STEAM CANVAS
+   ════════════════════════════════════════ */
+#steamCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ════════════════════════════════════════
+   BACKGROUND ORBS
+   ════════════════════════════════════════ */
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(110px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-orb--1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(0,112,74,.20), transparent 70%);
+  top: -180px; left: -180px;
+  animation: orbFloat 16s ease-in-out infinite alternate;
+}
+
+.bg-orb--2 {
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, rgba(30,158,110,.13), transparent 70%);
+  bottom: -120px; right: -80px;
+  animation: orbFloat 20s ease-in-out infinite alternate-reverse;
+}
+
+.bg-orb--3 {
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(203,162,88,.07), transparent 70%);
+  top: 45%; left: 58%;
+  animation: orbFloat 12s ease-in-out infinite alternate;
+}
+
+@keyframes orbFloat {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(30px, 40px) scale(1.07); }
+}
+
+/* ════════════════════════════════════════
+   LOADER — centred column
+   ════════════════════════════════════════ */
+.loader {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  animation: loaderFadeIn .55s var(--ease-out) both;
+}
+
+@keyframes loaderFadeIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ════════════════════════════════════════
+   CUP WRAP
+   ════════════════════════════════════════ */
+.cup-wrap {
+  position: relative;
+  width: 120px;
+  height: 180px;
+  margin-bottom: 36px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+/* Pulse rings */
+.cup-glow-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 170px; height: 170px;
+  margin: -85px 0 0 -85px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,112,74,.28);
+  pointer-events: none;
+  animation: glowRingPulse 2.6s ease-in-out infinite;
+}
+
+.cup-glow-ring::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 210px; height: 210px;
+  margin: -105px 0 0 -105px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,112,74,.12);
+  animation: glowRingPulse 2.6s ease-in-out .55s infinite;
+}
+
+@keyframes glowRingPulse {
+  0%, 100% { transform: scale(.93); opacity: .5; }
+  50%       { transform: scale(1.07); opacity: 1; }
+}
+
+/* ── Cup container ── */
+.cup {
+  position: relative;
+  width: 108px;
+  height: 160px;
+  animation: cupBob 3s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes cupBob {
+  0%, 100% { transform: translateY(0); }
+  45%       { transform: translateY(-8px); }
+}
+
+/* ── Steam ── */
+.steam {
+  position: absolute;
+  bottom: 100%;
+  width: 5px;
+  border-radius: 3px;
+  background: linear-gradient(to top, transparent 0%, rgba(255,255,255,.55) 50%, transparent 100%);
+  filter: blur(2px);
+  animation: steamRise 2.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.steam--1 { left: 22%;  height: 30px; animation-delay: 0s;   animation-duration: 2.1s; }
+.steam--2 { left: 50%;  height: 40px; animation-delay: .4s;  animation-duration: 2.5s; }
+.steam--3 { left: 76%;  height: 26px; animation-delay: .85s; animation-duration: 1.9s; }
+
+@keyframes steamRise {
+  0%   { opacity: 0;   transform: translateY(0)     scaleX(1); }
+  25%  { opacity: .75; }
+  75%  { opacity: .3;  transform: translateY(-22px) scaleX(2); }
+  100% { opacity: 0;   transform: translateY(-36px) scaleX(2.4); }
+}
+
+/* ── Lid ── */
+.cup__lid {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 108px;
+  height: 22px;
+  background: linear-gradient(180deg, #2d6648 0%, #1a3d2b 100%);
+  border-radius: 8px 8px 3px 3px;
+  border: 1.5px solid rgba(0,112,74,.50);
+  border-bottom: none;
+  z-index: 4;
+  overflow: hidden;
+}
+
+.cup__lid-tab {
+  position: absolute;
+  top: -7px; left: 50%;
+  transform: translateX(-50%);
+  width: 24px; height: 9px;
+  background: #1e4735;
+  border: 1.5px solid rgba(0,112,74,.50);
+  border-bottom: none;
+  border-radius: 5px 5px 0 0;
+}
+
+/* Lid shine streak */
+.cup__lid-shine {
+  position: absolute;
+  top: 3px; left: 12px;
+  width: 28px; height: 3px;
+  background: rgba(255,255,255,.12);
+  border-radius: 2px;
+  transform: rotate(-2deg);
+}
+
+/* ── Cup Body ── */
+.cup__body {
+  position: absolute;
+  top: 20px;
+  left: 0; right: 0; bottom: 0;
+  background: linear-gradient(160deg, #1f5040 0%, #1E3932 55%, #0d2b22 100%);
+  border-radius: 5px 5px 22px 22px;
+  border: 1.5px solid rgba(0,112,74,.40);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.35),
+    0 12px 40px rgba(0,0,0,.6),
+    inset 0 1px 0 rgba(255,255,255,.07),
+    0 0 50px -10px var(--sb-green-glow);
+  overflow: visible;
+  z-index: 1;
+}
+
+/* ── Liquid clip ── */
+.cup__clip {
+  position: absolute;
+  inset: 0;
+  border-radius: 5px 5px 22px 22px;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ── Liquid fill ── */
+.cup__liquid {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 0;
+  background: linear-gradient(180deg,
+    rgba(0,150,90,.45) 0%,
+    rgba(0,110,65,.80) 40%,
+    rgba(0,80,45,.95)  100%
+  );
+  animation: liquidFill 3s var(--ease-out) .3s forwards;
+  border-radius: 0 0 20px 20px;
+}
+
+@keyframes liquidFill {
+  from { height: 0; }
+  to   { height: 52%; }   /* only fills lower half — keeps logo zone clear */
+}
+
+/* ── Wave on liquid surface ── */
+.cup__wave {
+  position: absolute;
+  top: -6px; left: -30%;
+  width: 160%; height: 12px;
+  background: rgba(255,255,255,.10);
+  border-radius: 50%;
+  animation: waveRock 2s ease-in-out infinite;
+}
+
+@keyframes waveRock {
+  0%, 100% { transform: translateX(0)    scaleY(1); }
+  50%       { transform: translateX(12%) scaleY(1.4); }
+}
+
+/* ── Foam ── */
+.cup__foam {
+  position: absolute;
+  top: -4px; left: 5%; right: 5%;
+  height: 8px;
+  background: rgba(255,255,255,.14);
+  border-radius: 50%;
+  animation: foamAppear 3s var(--ease-out) .3s both;
+}
+
+@keyframes foamAppear {
+  0%, 55% { opacity: 0; }
+  100%     { opacity: 1; }
+}
+
+/* ── Heat shimmer streaks (inside body) ── */
+.cup__shimmer {
+  position: absolute;
+  width: 3px;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,.09), transparent);
+  border-radius: 2px;
+  top: 10%; bottom: 30%;
+  animation: shimmerFade 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cup__shimmer--1 { left: 18%; animation-delay: 0s;  }
+.cup__shimmer--2 { left: 72%; animation-delay: 1.4s; width: 2px; }
+
+@keyframes shimmerFade {
+  0%, 100% { opacity: 0;   transform: scaleY(.6); }
+  50%       { opacity: 1;  transform: scaleY(1); }
+}
+
+/* ── Main shine streak ── */
+.cup__shine {
+  position: absolute;
+  top: 8px; left: 11px;
+  width: 8px; height: 60px;
+  background: linear-gradient(to bottom, rgba(255,255,255,.18), transparent);
+  border-radius: 4px;
+  transform: rotate(-7deg);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── Drip detail ── */
+.cup__drip {
+  position: absolute;
+  top: -1px; right: 22px;
+  width: 4px; height: 0;
+  background: linear-gradient(to bottom, rgba(0,160,90,.6), rgba(0,130,70,.3));
+  border-radius: 0 0 3px 3px;
+  animation: dripFall 4s ease-in-out 2.5s infinite;
+  z-index: 2;
+}
+
+@keyframes dripFall {
+  0%, 30%  { height: 0;    opacity: 0; }
+  50%      { height: 14px; opacity: 1; }
+  80%,100% { height: 18px; opacity: 0; transform: translateY(4px); }
+}
+
+/* ── Logo — direct child of .cup, highest z-index ── */
+.cup__logo {
+  position: absolute;
+  top: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  width: 60px; height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,0,0,.45) 50%, rgba(0,50,30,.3) 100%);
+  box-shadow:
+    0 0 0 1.5px rgba(255,255,255,.10),
+    0 0 22px -4px rgba(0,112,74,.7),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+/* Rotating orbit ring */
+.cup__logo-ring {
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(0,112,74,.45);
+  animation: orbitSpin 6s linear infinite;
+}
+
+.cup__logo-ring::after {
+  content: '';
+  position: absolute;
+  top: -1px; left: 30%;
+  width: 8px; height: 8px;
+  background: var(--sb-green-light);
+  border-radius: 50%;
+  box-shadow: 0 0 8px 2px rgba(30,158,110,.7);
+}
+
+@keyframes orbitSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.cup__logo img {
+  display: block;
+  width: 44px; height: 44px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.6));
+  animation:
+    logoFadeIn  .7s var(--ease-out) .7s both,
+    logoSpin   2.4s var(--ease-out) 1.1s both,
+    logoPulse  3.2s ease-in-out     3.6s infinite;
+}
+
+@keyframes logoFadeIn {
+  from { opacity: 0; transform: scale(.4) rotate(-200deg); }
+  to   { opacity: 1; transform: scale(1)  rotate(0deg); }
+}
+
+@keyframes logoSpin {
+  0%   { transform: scale(1)    rotate(0deg); }
+  40%  { transform: scale(1.2)  rotate(210deg); }
+  70%  { transform: scale(.93)  rotate(345deg); }
+  100% { transform: scale(1)    rotate(360deg); }
+}
+
+@keyframes logoPulse {
+  0%, 100% { transform: scale(1);    filter: drop-shadow(0 2px 8px rgba(0,0,0,.6)); }
+  35%       { transform: scale(1.12); filter: drop-shadow(0 0 12px rgba(0,112,74,.8)); }
+  65%       { transform: scale(1.06); filter: drop-shadow(0 0 18px rgba(30,158,110,.6)); }
+}
+
+/* ── Sleeve ── */
+.cup__sleeve {
+  position: absolute;
+  bottom: 6px; left: 50%;
+  transform: translateX(-50%);
+  width: 114px;
+  height: 36px;
+  background: linear-gradient(135deg, rgba(0,80,50,.90), rgba(0,48,30,.96));
+  border: 1px solid rgba(0,112,74,.35);
+  border-radius: 4px;
+  z-index: 3;
+  overflow: hidden;
+}
+
+/* Diagonal stripe texture on sleeve */
+.cup__sleeve-stripe {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 6px,
+    rgba(255,255,255,.03) 6px,
+    rgba(255,255,255,.03) 7px
+  );
+}
+
+.cup__sleeve::after {
+  content: '';
+  position: absolute;
+  top: 6px; left: 10px; right: 10px;
+  height: 1px;
+  background: rgba(255,255,255,.08);
+  border-radius: 1px;
+}
+
+/* ── Handle ── */
+.cup__handle {
+  position: absolute;
+  right: -18px;
+  top: 35px;
+  width: 22px;
+  height: 36px;
+  border: 2.5px solid rgba(0,112,74,.55);
+  border-left: none;
+  border-radius: 0 14px 14px 0;
+  z-index: 0;
+  box-shadow: 2px 0 8px -2px rgba(0,0,0,.4);
+}
+
+/* Handle inner highlight */
+.cup__handle::after {
+  content: '';
+  position: absolute;
+  top: 6px; right: 2px;
+  width: 3px; height: 16px;
+  background: rgba(0,112,74,.25);
+  border-radius: 2px;
+}
+
+/* ════════════════════════════════════════
+   BRAND TEXT
+   ════════════════════════════════════════ */
+.brand-text {
+  text-align: center;
+  margin-bottom: 28px;
+  animation: fadeUp .5s var(--ease-out) .25s both;
+}
+
+.brand-text__sub {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--sb-green-light);
+  margin-bottom: 7px;
+}
+
+.brand-text__title {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -.2px;
+  min-height: 1.7rem;
+}
+
+/* blinking cursor via pseudo-element */
+.brand-text__title::after {
+  content: '|';
+  margin-left: 2px;
+  color: var(--sb-green-light);
+  animation: blink .8s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ════════════════════════════════════════
+   PROGRESS BAR
+   ════════════════════════════════════════ */
+.progress-wrap {
+  width: 260px;
+  margin-bottom: 12px;
+  animation: fadeUp .5s var(--ease-out) .4s both;
+}
+
+.progress-track {
+  position: relative;
+  height: 3px;
+  background: rgba(255,255,255,.07);
+  border-radius: 99px;
+  margin-bottom: 9px;
+  overflow: visible;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--sb-green), var(--sb-green-light), #34D399);
+  border-radius: 99px;
+  transition: width .4s var(--ease-out);
+}
+
+/* Glowing dot at the tip */
+.progress-glow {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  transform: translate(-50%, -50%);
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: #34D399;
+  box-shadow: 0 0 8px 3px rgba(52,211,153,.65);
+  pointer-events: none;
+  transition: left .4s var(--ease-out);
+}
+
+.progress-pct {
+  display: block;
+  text-align: right;
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--sb-green-light);
+}
+
+/* ════════════════════════════════════════
+   STATUS TEXT
+   ════════════════════════════════════════ */
+.load-status {
+  font-size: .8rem;
+  color: var(--text-secondary);
+  letter-spacing: .02em;
+  margin-bottom: 22px;
+  min-height: 1.1em;
+  text-align: center;
+  transition: opacity .25s ease;
+  animation: fadeUp .5s var(--ease-out) .5s both;
+}
+
+/* ════════════════════════════════════════
+   BOUNCING DOTS
+   ════════════════════════════════════════ */
+.dot-row {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  animation: fadeUp .5s var(--ease-out) .6s both;
+}
+
+.dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--sb-green);
+  opacity: .3;
+  animation: dotBounce 1.3s ease-in-out infinite;
+}
+
+.dot--1 { animation-delay: 0s; }
+.dot--2 { animation-delay: .18s; }
+.dot--3 { animation-delay: .36s; }
+
+@keyframes dotBounce {
+  0%, 80%, 100% { transform: translateY(0) scale(1);    opacity: .3; }
+  40%            { transform: translateY(-5px) scale(1.4); opacity: 1;
+                   box-shadow: 0 0 6px 2px var(--sb-green-glow); }
+}
+
+/* ════════════════════════════════════════
+   EXIT TRANSITION
+   ════════════════════════════════════════ */
+.loader.exiting {
+  animation: loaderExit .65s var(--ease-out) forwards;
+}
+
+@keyframes loaderExit {
+  0%   { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.03); }
+}
+
+body.exiting {
+  animation: bgFade .65s ease forwards;
+}
+
+@keyframes bgFade {
+  to { background: #0B1215; }
+}
+
+
+
+
+
+
+
+
+
